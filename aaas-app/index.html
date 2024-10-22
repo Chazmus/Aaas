@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <h1>Login with Social Media</h1>
+    <button onclick="loginWithGoogle()">Login with Google</button>
+    <button onclick="loginWithApple()">Login with Apple</button>
+
+    <script>
+      function loginWithGoogle() {
+        google.script.run.loginWithGoogle();
+      }
+
+      function loginWithApple() {
+        google.script.run.loginWithApple(); // Placeholder for Apple login
+      }
+    </script>
+  </body>
+</html>
+
