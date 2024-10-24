@@ -26,7 +26,7 @@ function getOAuthService() {
     .setTokenUrl('https://accounts.google.com/o/oauth2/token')
     .setClientId(config.GOOGLE_CLIENT_ID)
     .setClientSecret(config.GOOGLE_CLIENT_SECRET)
-    .setRedirectUri('https://script.google.com/macros/d/1k5PyWPR2F8mjn6FNh7tO9A0Xb8-xcUNqG8okFnynU1TXMaDmhDPKrCT1/usercallback') // Script ID
+      .setRedirectUri('https://script.google.com/macros/d/' + config.MAIN_SCRIPT_ID + '/usercallback') // Script ID
     .setScope('https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email')
     .setPropertyStore(PropertiesService.getUserProperties())
     .setCallbackFunction('authCallback');
