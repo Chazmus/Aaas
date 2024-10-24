@@ -1,0 +1,8 @@
+function getConfiguration() {
+    return {
+        "GOOGLE_CLIENT_ID": "xyz",
+        "GOOGLE_CLIENT_SECRET": "xzy",
+        "GOOGLE_SPREADSHEET_ID": "xyz",
+        "MAIN_SCRIPT_ID": "xzy"
+    }
+}

@@ -2,3 +2,6 @@
 .idea
 .aider*
 .env
+
+# For secrets and ids which shouldn't be in source control
+aaas-app/Configuration.gs

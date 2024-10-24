@@ -1,9 +1,6 @@
-const config = {
-  "GOOGLE_CLIENT_ID": "YOUR_GOOGLE_CLIENT_ID",
-  "GOOGLE_SPREADSHEET_ID": "YOUR_GOOGLE_SPREADSHEET_ID",
-}
+const config = getConfiguration()
 
-// Google OAuth configuration
+// HTML template
 function doGet(e) {
   return HtmlService.createHtmlOutputFromFile('index');
 }
@@ -28,7 +25,7 @@ function getOAuthService() {
     .setAuthorizationBaseUrl('https://accounts.google.com/o/oauth2/auth')
     .setTokenUrl('https://accounts.google.com/o/oauth2/token')
     .setClientId(config.GOOGLE_CLIENT_ID)
-    .setClientSecret('YOUR_GOOGLE_CLIENT_SECRET')
+    .setClientSecret(config.GOOGLE_CLIENT_SECRET)
     .setRedirectUri('https://script.google.com/macros/d/1k5PyWPR2F8mjn6FNh7tO9A0Xb8-xcUNqG8okFnynU1TXMaDmhDPKrCT1/usercallback') // Script ID
     .setScope('https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email')
     .setPropertyStore(PropertiesService.getUserProperties())
