@@ -1,4 +1,7 @@
-import config from './config';
+const config = {
+  "GOOGLE_CLIENT_ID": "YOUR_GOOGLE_CLIENT_ID",
+  "GOOGLE_SPREADSHEET_ID": "YOUR_GOOGLE_SPREADSHEET_ID",
+}
 
 // Google OAuth configuration
 function doGet(e) {
