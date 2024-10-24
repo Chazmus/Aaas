@@ -1,3 +1,5 @@
+import config from './config';
+
 // Google OAuth configuration
 function doGet(e) {
   return HtmlService.createHtmlOutputFromFile('index');
@@ -22,7 +24,7 @@ function getOAuthService() {
   return OAuth2.createService('google')
     .setAuthorizationBaseUrl('https://accounts.google.com/o/oauth2/auth')
     .setTokenUrl('https://accounts.google.com/o/oauth2/token')
-    .setClientId('YOUR_GOOGLE_CLIENT_ID')
+    .setClientId(config.GOOGLE_CLIENT_ID)
     .setClientSecret('YOUR_GOOGLE_CLIENT_SECRET')
     .setRedirectUri('https://script.google.com/macros/d/1k5PyWPR2F8mjn6FNh7tO9A0Xb8-xcUNqG8okFnynU1TXMaDmhDPKrCT1/usercallback') // Script ID
     .setScope('https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email')

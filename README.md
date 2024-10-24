@@ -25,26 +25,29 @@ Before you begin, ensure you have the following installed:
 
 ### Deploying the Platform
 
-1. **Clone the Repository**:
-   ```sh
-   git clone https://github.com/your-repo/AaaS.git
-   cd AaaS
+#### Clone the Repository
 
-2 Install Dependencies (for demo app only):
+```sh
+git clone https://github.com/your-repo/AaaS.git
+```
 
-    npm install
+#### Deploy Google App Scripts using clasp:
 
-3 Deploy Google App Scripts using clasp:
+The Google App scripts located in the aaas-app folder are deployed using the `clasp` CLI tool.
 • Follow the Google Apps Script documentation to set up and authenticate clasp.
 • Deploy the scripts by running:
 
-       clasp push
+```
+clasp push
+```
 
-4 Configure Google Sheets:
-• Open your Google Sheets document linked with AaaS.
-• Configure user roles and permissions as needed.
+#### Configure Google Sheets:
 
-                                                                           Running the Demo App
+* Create a new Google Sheets document.
+* Ensure that the google sheets document ID is listed correctly in the `config.js` file.
+* Configure user roles and permissions as needed.
+
+#### Running the Demo App
 
 1 Ensure Node.js is installed on your machine.
 2 Navigate to the test-app directory:
@@ -56,7 +59,8 @@ Before you begin, ensure you have the following installed:
     npm install
 
 4 Run the demo app:
-    node index.js
+
+    node app.js
 
 -----
 Feel free to reach out if you have any questions or need further assistance with deploying and using AaaS!
