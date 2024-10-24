@@ -12,6 +12,7 @@ function loginWithGoogle() {
     var authorizationUrl = service.getAuthorizationUrl();
     return HtmlService.createHtmlOutput('<a href="' + authorizationUrl + '">Authorize Google Account</a>');
   } else {
+    // User already authorized, handle accordingly (e.g., fetch user info)
     var token = service.getAccessToken();
     var userInfo = getGoogleUserInfo(token);
     saveUserData(userInfo);
@@ -26,7 +27,7 @@ function getOAuthService() {
     .setTokenUrl('https://accounts.google.com/o/oauth2/token')
     .setClientId(config.GOOGLE_CLIENT_ID)
     .setClientSecret(config.GOOGLE_CLIENT_SECRET)
-      .setRedirectUri('https://script.google.com/macros/d/' + config.MAIN_SCRIPT_ID + '/usercallback') // Script ID
+    .setRedirectUri('https://script.google.com/macros/d/' + config.MAIN_SCRIPT_ID + '/usercallback') // Script ID
     .setScope('https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email')
     .setPropertyStore(PropertiesService.getUserProperties())
     .setCallbackFunction('authCallback');
@@ -59,4 +60,3 @@ function saveUserData(userInfo) {
   var sheet = SpreadsheetApp.openById('1-rubsPcdsoIgFd0wHLpd-8ynBpF-8zrX7Ahrmpy7ehE').getSheetByName('Users'); // Sheet ID
   sheet.appendRow([new Date(), userInfo.id, userInfo.name, userInfo.email]);
 }
-
