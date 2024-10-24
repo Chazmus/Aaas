@@ -7,12 +7,13 @@ function doGet(e) {
 
 // Google OAuth2 flow
 function loginWithGoogle() {
+  console.log('loginWithGoogle called'); // Add this line for debugging
   var service = getOAuthService();
   if (!service.hasAccess()) {
     var authorizationUrl = service.getAuthorizationUrl();
     return HtmlService.createHtmlOutput('<a href="' + authorizationUrl + '">Authorize Google Account</a>');
   } else {
-    // User already authorized, handle accordingly (e.g., fetch user info)
+    console.log('User already authorized'); // Add this line for debugging
     var token = service.getAccessToken();
     var userInfo = getGoogleUserInfo(token);
     saveUserData(userInfo);
@@ -57,6 +58,6 @@ function getGoogleUserInfo(token) {
 
 // Save user data to Google Sheets
 function saveUserData(userInfo) {
-  var sheet = SpreadsheetApp.openById('1-rubsPcdsoIgFd0wHLpd-8ynBpF-8zrX7Ahrmpy7ehE').getSheetByName('Users'); // Sheet ID
+  var sheet = SpreadsheetApp.openById(config.GOOGLE_SPREADSHEET_ID).getSheetByName('Users'); // Sheet ID
   sheet.appendRow([new Date(), userInfo.id, userInfo.name, userInfo.email]);
 }
