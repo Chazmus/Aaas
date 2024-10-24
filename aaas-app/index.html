@@ -6,16 +6,30 @@
   <body>
     <h1>Login with Social Media</h1>
     <button onclick="loginWithGoogle()">Login with Google</button>
-    <button onclick="loginWithApple()">Login with Apple</button>
+    <button onclick="loginWithApple()">Login with Apple"></button>
 
     <script>
       function loginWithGoogle() {
-        google.script.run.loginWithGoogle();
+        google.script.run.withSuccessHandler(function(authorizationUrl) {
+          window.location.href = authorizationUrl;
+        }).loginWithGoogle();
       }
 
       function loginWithApple() {
         google.script.run.loginWithApple(); // Placeholder for Apple login
       }
+
+      function handleGoogleRedirect() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var code = urlParams.get('code');
+        if (code) {
+          google.script.run.withSuccessHandler(function() {
+            window.location.href = '/';
+          }).handleGoogleRedirect(code);
+        }
+      }
+
+      window.onload = handleGoogleRedirect;
     </script>
   </body>
 </html>

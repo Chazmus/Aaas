@@ -11,7 +11,7 @@ function loginWithGoogle() {
   var service = getOAuthService();
   if (!service.hasAccess()) {
     var authorizationUrl = service.getAuthorizationUrl();
-    return HtmlService.createHtmlOutput('<a href="' + authorizationUrl + '">Authorize Google Account</a>');
+    return authorizationUrl;
   } else {
     console.log('User already authorized'); // Add this line for debugging
     var token = service.getAccessToken();
@@ -60,4 +60,13 @@ function getGoogleUserInfo(token) {
 function saveUserData(userInfo) {
   var sheet = SpreadsheetApp.openById(config.GOOGLE_SPREADSHEET_ID).getSheetByName('Users'); // Sheet ID
   sheet.appendRow([new Date(), userInfo.id, userInfo.name, userInfo.email]);
+}
+
+// Handle redirection after user authorizes the app
+function handleGoogleRedirect(code) {
+  var service = getOAuthService();
+  var token = service.getAccessToken();
+  var userInfo = getGoogleUserInfo(token);
+  saveUserData(userInfo);
+  return HtmlService.createHtmlOutput('<h1>Welcome, ' + userInfo.name + '</h1><p>Email: ' + userInfo.email + '</p>');
 }
