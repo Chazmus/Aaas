@@ -7,13 +7,11 @@ function doGet(e) {
 
 // Google OAuth2 flow
 function loginWithGoogle() {
-  console.log('loginWithGoogle called'); // Add this line for debugging
   var service = getOAuthService();
   if (!service.hasAccess()) {
     var authorizationUrl = service.getAuthorizationUrl();
     return HtmlService.createHtmlOutput('<a href="' + authorizationUrl + '">Authorize Google Account</a>');
   } else {
-    console.log('User already authorized'); // Add this line for debugging
     var token = service.getAccessToken();
     var userInfo = getGoogleUserInfo(token);
     saveUserData(userInfo);
