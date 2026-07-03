@@ -45,13 +45,22 @@ function authCallback(request) {
 
 // Retrieve Google user information using access token
 function getGoogleUserInfo(token) {
+  var cache = CacheService.getScriptCache();
+  var cachedData = cache.get(token);
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  }
+
   var url = 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json';
   var response = UrlFetchApp.fetch(url, {
     headers: {
       Authorization: 'Bearer ' + token
     }
   });
-  return JSON.parse(response.getContentText());
+
+  var responseText = response.getContentText();
+  cache.put(token, responseText, 3600); // Cache for 1 hour
+  return JSON.parse(responseText);
 }
 
 // Save user data to Google Sheets
