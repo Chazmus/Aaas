@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken'); // For JWT validation (if using JWT)
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Dummy secret key for JWT signing/verification
-const SECRET_KEY = 'your_secret_key';
+// Secret key for JWT signing/verification (can be provided via environment variable)
+const SECRET_KEY = process.env.SECRET_KEY || 'your_secret_key';
 
 // Middleware to check for a Bearer token in the Authorization header
 function checkToken(req, res, next) {
