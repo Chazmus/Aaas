@@ -1,7 +1,7 @@
 const config = getConfiguration()
 
 // HTML template
-function doGet(e) {
+function doGet() {
   return HtmlService.createHtmlOutputFromFile('index');
 }
 
