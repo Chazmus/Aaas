@@ -55,7 +55,16 @@ function getGoogleUserInfo(token) {
 }
 
 // Save user data to Google Sheets
+var cachedSheet = null;
 function saveUserData(userInfo) {
-  var sheet = SpreadsheetApp.openById(config.GOOGLE_SPREADSHEET_ID).getSheetByName('Users'); // Sheet ID
-  sheet.appendRow([new Date(), userInfo.id, userInfo.name, userInfo.email]);
+  var cache = CacheService.getScriptCache();
+  if (cache.get(userInfo.id)) {
+    return;
+  }
+
+  if (!cachedSheet) {
+    cachedSheet = SpreadsheetApp.openById(config.GOOGLE_SPREADSHEET_ID).getSheetByName('Users'); // Sheet ID
+  }
+  cachedSheet.appendRow([new Date(), userInfo.id, userInfo.name, userInfo.email]);
+  cache.put(userInfo.id, 'true', 21600); // Cache for 6 hours
 }
