@@ -1,0 +1,13 @@
+{
+  "name": "@aaas/sdk",
+  "version": "1.0.0",
+  "description": "Lightweight client SDK and Express/Node middleware for AaaS",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "jose": "^6.2.12"
+  }
+}

@@ -1,7 +1,20 @@
-*/node_modules/*
-.idea
-.aider*
-.env
+# Dependencies
+node_modules/
+*/node_modules/
 
-# For secrets and ids which shouldn't be in source control
-aaas-app/Configuration.gs
+# Cloudflare Wrangler
+.wrangler/
+
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+
+# IDE and OS files
+.idea/
+.vscode/
+.DS_Store
+*.log
+
+# AI/Assistant artifacts
+.aider*

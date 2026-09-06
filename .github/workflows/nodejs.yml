@@ -2,24 +2,19 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: test-app
-
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Use Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: '18.x'
-    - run: npm ci
+        node-version: '22.x'
+    - run: npm install
     - run: npm test

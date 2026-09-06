@@ -1,0 +1,23 @@
+{
+  "name": "@aaas/server",
+  "version": "2.0.0",
+  "description": "AaaS Core - Serverless Edge Authentication Server on Cloudflare Workers",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:migrate:local": "wrangler d1 execute aaas-db --local --file=./migrations/0001_initial.sql",
+    "db:migrate:remote": "wrangler d1 execute aaas-db --remote --file=./migrations/0001_initial.sql",
+    "test": "node --experimental-strip-types --test"
+  },
+  "dependencies": {
+    "hono": "^4.13.7",
+    "jose": "^6.2.12"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260906.1",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.129.0"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "aaas-monorepo",
+  "version": "2.0.0",
+  "private": true,
+  "description": "AaaS (Authentication as a Service) - Serverless Edge Auth on Cloudflare Workers and D1",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "dev:server": "npm run dev --workspace=apps/server",
+    "dev:demo": "npm run dev --workspace=apps/demo-app"
+  },
+  "keywords": [
+    "auth",
+    "authentication",
+    "cloudflare-workers",
+    "d1",
+    "sqlite",
+    "oauth2",
+    "oidc",
+    "jwt",
+    "jwks"
+  ],
+  "author": "",
+  "license": "MIT"
+}

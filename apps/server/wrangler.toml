@@ -1,0 +1,14 @@
+name = "aaas-server"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+DEV_MODE = "true"
+APP_NAME = "AaaS Server"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "aaas-db"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"

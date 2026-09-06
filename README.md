@@ -1,66 +1,162 @@
-# Authentication as a Service (AaaS)
+# Authentication as a Service (AaaS) 2.0
 
-## Description
+> **The 60-Second Serverless Auth Backend for Indie Developers**  
+> Powered by Cloudflare Workers (Edge Compute) and Cloudflare D1 (Serverless SQLite). Zero servers, zero maintenance, and $0/month on the free tier.
 
-Welcome to AaaS - an authentication platform designed to be easily deployed and hosted, making it accessible to any web
-application. Our service leverages Google
-AppScripts to host the platform securely with a Google Sheets backend for managing user roles and configurations.
+---
+
+## Why AaaS?
+
+When building side projects and web apps, developers usually face two extremes:
+1. **Third-party SaaS (Auth0, Clerk)**: Easy to start, but brings vendor lock-in, proprietary databases, and eventual pricing cliffs.
+2. **Rolling your own auth**: Tedious and error-prone (managing database schemas, OAuth redirects, session cookies, JWT signing, refresh tokens, and admin panels).
+
+**AaaS** gives you your own private authentication server on your own Cloudflare account. You own your data in SQLite, it boots in milliseconds at the edge worldwide, and it includes a built-in admin dashboard out of the box.
+
+---
 
 ## Features
 
-- **Easy Deployment**: Deploy our service in minutes using Google Apps Script.
-- **Role Management**: Configure user roles and permissions through Google Sheets.
-- **Secure Authentication**: Utilizes modern security practices to protect your resources.
-- **Demo App**: Included is a simple demo application (`test-app`) built with npm, which demonstrates the functionality
-  of AaaS.
+- ⚡ **100% Serverless & Edge-Native**: Built with [Hono](https://hono.dev) for Cloudflare Workers. Sub-millisecond execution and 0ms cold starts.
+- 🗄️ **Serverless SQLite (Cloudflare D1)**: Stores users and roles in an ACID-compliant SQLite database you control.
+- 🔑 **Asymmetric JWTs & JWKS**: Signs tokens with RSA (RS256) and exposes `/.well-known/jwks.json`. Client apps verify tokens offline using public keys—no constant server callbacks.
+- 👑 **Embedded Admin Dashboard**: Manage registered users, toggle active/suspended status, and change RBAC roles (`admin`, `user`, etc.) directly from the built-in `/admin` web interface.
+- 🧪 **Instant Dev Mode**: Test locally right away with 1-click mock logins (e.g. Alice the Admin or Bob the User) without configuring Google/GitHub OAuth credentials first.
+- 📦 **Drop-in Client SDK (`@aaas/sdk`)**: Protect routes in Express, Hono, or Node with a single middleware function.
 
-## Installation & Running Instructions
+---
 
-### Prerequisites
+## Repository Structure
 
-Before you begin, ensure you have the following installed:
+```text
+AaaS/
+├── apps/
+│   ├── server/         # Cloudflare Worker (AaaS Core)
+│   │   ├── src/        # Hono app, OAuth flows, D1 queries, Admin UI
+│   │   └── migrations/ # D1 SQLite schemas (users, signing_keys)
+│   │
+│   └── demo-app/       # Example client web app
+│       ├── server.js   # Express server using @aaas/sdk
+│       └── public/     # SPA demonstrating login and role-gated routes
+│
+└── packages/
+    └── sdk/            # Universal client SDK & Express middleware
+```
 
-- Node.js (for running the demo app)
-- Google Apps Script account and `clasp` CLI tool for deploying the App Scripts.
+---
 
-### Deploying the Platform
+## Quickstart (Local Development)
 
-#### Clone the Repository
+### 1. Clone and Install Dependencies
 
-```sh
+```bash
 git clone https://github.com/your-repo/AaaS.git
+cd AaaS
+npm install
 ```
 
-#### Deploy Google App Scripts using clasp:
+### 2. Run Tests
 
-The Google App scripts located in the aaas-app folder are deployed using the `clasp` CLI tool.
-• Follow the Google Apps Script documentation to set up and authenticate clasp.
-• Deploy the scripts by running:
+All components (Server, SDK, and Demo App) include comprehensive test suites running on Node's native test runner:
 
-```
-clasp push
+```bash
+npm test
 ```
 
-#### Configure Google Sheets:
+### 3. Start the Local Auth Server
 
-* Create a new Google Sheets document.
-* Ensure that the google sheets document ID is listed correctly in the `config.js` file.
-* Configure user roles and permissions as needed.
+Start the Cloudflare Worker with local D1 emulation:
 
-#### Running the Demo App
+```bash
+npm run dev:server
+```
+The server will be running at `http://localhost:8787`. You can visit:
+- **Server Home**: `http://localhost:8787`
+- **Login Portal**: `http://localhost:8787/auth/login`
+- **Admin Console**: `http://localhost:8787/admin`
+- **JWKS Endpoint**: `http://localhost:8787/.well-known/jwks.json`
 
-1 Ensure Node.js is installed on your machine.
-2 Navigate to the test-app directory:
+### 4. Start the Demo Client App
 
-    cd test-app
+In a separate terminal:
 
-3 Install dependencies:
+```bash
+npm run dev:demo
+```
+Open `http://localhost:3000` to test the client application flow, login redirection, and role permissions.
 
-    npm install
+---
 
-4 Run the demo app:
+## Integrating with Your Own Web App
 
-    node app.js
+Install the SDK in your project:
 
------
-Feel free to reach out if you have any questions or need further assistance with deploying and using AaaS!
+```bash
+npm install @aaas/sdk
+```
+
+Protect routes in Express:
+
+```javascript
+const express = require('express');
+const { requireAuth } = require('@aaas/sdk');
+
+const app = express();
+const AAAS_URL = 'https://your-auth-server.workers.dev';
+
+// Open to anyone
+app.get('/api/public', (req, res) => {
+  res.json({ message: 'Hello world' });
+});
+
+// Any authenticated user
+app.get('/api/profile', requireAuth({ issuer: AAAS_URL }), (req, res) => {
+  res.json({ user: req.user });
+});
+
+// Admin-only route
+app.get('/api/admin', requireAuth({ issuer: AAAS_URL, role: 'admin' }), (req, res) => {
+  res.json({ message: 'Welcome, administrator!' });
+});
+```
+
+---
+
+## Deploying to Cloudflare Workers
+
+### 1. Create your D1 Database
+
+```bash
+cd apps/server
+npx wrangler d1 create aaas-db
+```
+Copy the `database_id` returned by Cloudflare into `apps/server/wrangler.toml`.
+
+### 2. Run Database Migrations
+
+```bash
+npx wrangler d1 execute aaas-db --remote --file=./migrations/0001_initial.sql
+```
+
+### 3. Set OAuth Secrets (Optional)
+
+If using Google or GitHub OAuth:
+
+```bash
+npx wrangler secret put GOOGLE_CLIENT_ID
+npx wrangler secret put GOOGLE_CLIENT_SECRET
+```
+
+### 4. Deploy
+
+```bash
+npx wrangler deploy
+```
+
+Your serverless authentication platform is now live at `https://aaas-server.<your-subdomain>.workers.dev`!
+
+---
+
+## License
+
+MIT

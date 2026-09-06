@@ -1,0 +1,14 @@
+{
+  "name": "demo-app",
+  "version": "1.0.0",
+  "description": "Example client web application using @aaas/sdk",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@aaas/sdk": "*",
+    "express": "^5.2.1"
+  }
+}
